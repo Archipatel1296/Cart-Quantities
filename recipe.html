@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Video ingredents v/s ingredents you have</title>
+
+    </head>
+    <body>
+        <form>
+            <label for="userLink">Enter a link:</label>
+            <input type="url" id="userLink" name="userLink" placeholder="https://example.com" required>
+            <button type="submit">Submit</button>
+          </form>
+          <p id="ingredientsOutput"></p>
+
+          <script>
+            document.getElementById("urlForm").addEventListener("submit", async function(event) {
+              event.preventDefault();
+              
+              let url = document.getElementById("userLink").value;
+              
+              try {
+                let response = await fetch("http://127.0.0.1:8000/extract-ingredients", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json"
+                  },
+                  body: JSON.stringify({ url: url })
+                });
+          
+                let data = await response.json();
+                document.getElementById("ingredientsOutput").innerText = "Ingredients: " + data.ingredients.join(", ");
+              } catch (error) {
+                console.error("Error fetching ingredients:", error);
+              }
+            });
+          </script>
+    </body>
+</html>
